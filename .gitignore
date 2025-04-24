@@ -33,9 +33,8 @@ staticfiles/
 .DS_Store
 Thumbs.db
 
-# AWS
+# AWS - note: .ebextensions tracked in git
 *.pem
-.ebextensions/
 
 # Coverage
 htmlcov/
