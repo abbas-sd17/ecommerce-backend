@@ -17,4 +17,17 @@ PNG captures for the Applied Software Project / academy report. Taken from the l
 
 **GET `/api/products/<id>/`:** uses Redis when available; with `IGNORE_EXCEPTIONS: True` it still works if Redis is not running.
 
-A merged Word document including these figures is at `../Project_Report_Template_with_Screenshots.docx` (generated from the Scaler template + this appendix).
+**Your report:** place `Syed_Abbas_Raza_Project_Report.docx` in the workspace folder **above** `ecommerce_backend/` (same level as the Scaler template).
+
+**Generate Word with appendix:**
+
+```bash
+cd ecommerce_backend && source venv/bin/activate && python docs/append_screenshots_to_report.py
+```
+
+This writes:
+
+- `../Syed_Abbas_Raza_Project_Report_With_Screenshots.docx` (next to your source report)
+- `docs/Syed_Abbas_Raza_Project_Report_With_Screenshots.docx` (copy for Git)
+
+To build from the **empty Scaler template** only: `python docs/append_screenshots_to_report.py --source template` → `docs/Project_Report_Template_with_Screenshots.docx`.

@@ -53,7 +53,8 @@ ecommerce_backend/
 │   └── django.config         # AWS EBS config (Lecture 8)
 ├── docs/
 │   ├── screenshots/          # Report PNGs + README
-│   └── Project_Report_Template_with_Screenshots.docx
+│   ├── Syed_Abbas_Raza_Project_Report_With_Screenshots.docx
+│   └── Project_Report_Template_with_Screenshots.docx  # optional (--source template)
 ├── requirements.txt
 └── manage.py
 ```
@@ -61,14 +62,15 @@ ecommerce_backend/
 ## Report documentation
 
 - **`docs/screenshots/`** — PNG screenshots for the Applied Software Project report (DRF API, Django admin, payments).
-- **`docs/Project_Report_Template_with_Screenshots.docx`** — Scaler backend report template with an **Appendix** of those figures. Regenerate after replacing PNGs:
+- **Your Word report** — keep **`Syed_Abbas_Raza_Project_Report.docx`** in the folder **above** this repo (`syedbackendprojectscaler/`, next to the Scaler template).
+- **`docs/Syed_Abbas_Raza_Project_Report_With_Screenshots.docx`** — your report plus an **Appendix** with all figures. Regenerate after editing the source `.docx` or replacing PNGs:
 
 ```bash
 pip install python-docx
 python docs/append_screenshots_to_report.py
 ```
 
-The script expects **`Scaler Neovarsity _ Academy Project Report Template (Backend Specialization).docx`** in the parent folder (`syedbackendprojectscaler/`, one level above `ecommerce_backend/`).
+Also creates **`../Syed_Abbas_Raza_Project_Report_With_Screenshots.docx`** beside your source file. Empty template only: `python docs/append_screenshots_to_report.py --source template` → `docs/Project_Report_Template_with_Screenshots.docx`.
 
 ## API Endpoints
 
