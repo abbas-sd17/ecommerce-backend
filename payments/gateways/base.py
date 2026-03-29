@@ -1,9 +1,9 @@
 """
 Abstract base class for payment gateways.
 Lecture 9 — Abstract Classes, multiple payment gateway support.
-Forces all gateway implementations to implement get_payment().
 """
 from abc import ABC, abstractmethod
+from typing import Optional
 
 
 class PaymentGateway(ABC):
@@ -33,3 +33,10 @@ class PaymentGateway(ABC):
         :return: True if payment is valid, False otherwise
         """
         pass
+
+    def verify_webhook_signature(self, raw_body: bytes, signature_header: Optional[str] = None) -> bool:
+        """
+        Optional webhook HMAC verification (Lecture 8).
+        Default: allow (for gateways without webhook signing). Override in concrete gateways.
+        """
+        return True

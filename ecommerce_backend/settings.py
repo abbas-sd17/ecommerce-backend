@@ -112,6 +112,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Razorpay credentials (Lecture 9 — Payment Integration)
 RAZORPAY_ID = os.environ.get('RAZORPAY_ID', 'rzp_test_your_key_id')
 RAZORPAY_SECRET = os.environ.get('RAZORPAY_SECRET', 'your_razorpay_secret')
+# Callback after customer pays (must be publicly reachable in production, not localhost)
+RAZORPAY_CALLBACK_URL = os.environ.get(
+    'RAZORPAY_CALLBACK_URL',
+    'http://127.0.0.1:8000/api/payments/verify/',
+)
+# Webhook signing secret from Razorpay Dashboard → Webhooks (Lecture 8 — verify X-Razorpay-Signature)
+RAZORPAY_WEBHOOK_SECRET = os.environ.get('RAZORPAY_WEBHOOK_SECRET', '')
 
 # DRF settings
 REST_FRAMEWORK = {

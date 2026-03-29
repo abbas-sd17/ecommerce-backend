@@ -3,6 +3,8 @@ Views for the payments app.
 Lecture 8: Idempotency concept, webhook handling.
 Lecture 9: PaymentView, WebhookView, VerifyPaymentView.
 """
+import json
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -17,9 +19,10 @@ class PaymentView(APIView):
     """
     Initiates a payment for a given order.
     Lecture 9 — PaymentView with order_id and amount.
+    Lecture 8 — Optional Idempotency-Key header or body idempotency_key.
 
     POST /api/payments/initiate/
-    Body: { "order_id": "ORD001", "amount": 50000 }
+    Body: { "order_id": "ORD001", "amount": 50000, "idempotency_key": "optional" }
     Returns: payment_link, payment_id
     """
 
@@ -30,16 +33,29 @@ class PaymentView(APIView):
 
         order_id = data.validated_data.get('order_id')
         amount = data.validated_data.get('amount')
+        client_key = request.META.get('HTTP_IDEMPOTENCY_KEY') or data.validated_data.get(
+            'idempotency_key'
+        )
+        if client_key:
+            client_key = str(client_key).strip() or None
 
-        # Business logic delegated to service (Lecture 9)
         service = PaymentService()
         result = service.initiate_payment(
             order_id=order_id,
             amount=amount,
-            user=request.user if request.user.is_authenticated else None
+            user=request.user if request.user.is_authenticated else None,
+            client_idempotency_key=client_key,
         )
 
-        return Response(result, status=status.HTTP_201_CREATED)
+        if result.get('error'):
+            return Response(result, status=status.HTTP_502_BAD_GATEWAY)
+
+        code = (
+            status.HTTP_200_OK
+            if result.get('idempotent_replay')
+            else status.HTTP_201_CREATED
+        )
+        return Response(result, status=code)
 
 
 class VerifyPaymentView(APIView):
@@ -66,14 +82,31 @@ class VerifyPaymentView(APIView):
 class WebhookView(APIView):
     """
     Receives Razorpay webhook events.
-    Lecture 8 — Webhooks as solution to unreliable callbacks.
-    Webhooks handle payment status updates server-to-server.
-    Must be a public URL (not localhost).
+    Lecture 8 — Webhooks; verify X-Razorpay-Signature when RAZORPAY_WEBHOOK_SECRET is set.
     """
 
+    authentication_classes = []
+    permission_classes = []
+
     def post(self, request):
-        payload = request.data
+        raw = request.body
+        signature = request.META.get('HTTP_X_RAZORPAY_SIGNATURE')
+
         service = PaymentService()
+        if not service.gateway.verify_webhook_signature(raw, signature):
+            return Response(
+                {'error': 'invalid webhook signature'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            payload = json.loads(raw.decode('utf-8'))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return Response(
+                {'error': 'invalid json body'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         result = service.handle_webhook(payload)
         return Response(result, status=status.HTTP_200_OK)
 

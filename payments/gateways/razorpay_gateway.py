@@ -2,8 +2,10 @@
 Razorpay payment gateway implementation.
 Lecture 9 — RazorPay Integration with abstract class pattern.
 """
-import hmac
 import hashlib
+import hmac
+from typing import Optional
+
 from django.conf import settings
 from .base import PaymentGateway
 
@@ -40,18 +42,26 @@ class RazorpayPaymentGateway(PaymentGateway):
                 "payment_id": payment_id,
             }
 
+        base_callback = getattr(settings, 'RAZORPAY_CALLBACK_URL', '').rstrip('/')
+        sep = '&' if '?' in base_callback else '?'
+        callback_url = f"{base_callback}{sep}payment_id={payment_id}"
+
         payment_data = {
             "amount": amount,
             "currency": "INR",
             "accept_partial": False,
-            "reference_id": payment_id,  # idempotency key
+            "reference_id": payment_id,
             "description": f"Payment for Order {order_id}",
+            "notes": {
+                "internal_payment_id": str(payment_id),
+                "order_id": str(order_id),
+            },
             "notify": {
                 "sms": True,
                 "email": True
             },
             "reminder_enable": True,
-            "callback_url": f"{settings.RAZORPAY_CALLBACK_URL}?payment_id={payment_id}",
+            "callback_url": callback_url,
             "callback_method": "get"
         }
 
@@ -80,3 +90,20 @@ class RazorpayPaymentGateway(PaymentGateway):
             return True
         except Exception:
             return False
+
+    def verify_webhook_signature(self, raw_body: bytes, signature_header: Optional[str] = None) -> bool:
+        """
+        Razorpay: HMAC-SHA256(hex) of raw body with webhook secret (Lecture 8).
+        If RAZORPAY_WEBHOOK_SECRET is unset, accepts any request (local dev only).
+        """
+        secret = getattr(settings, 'RAZORPAY_WEBHOOK_SECRET', '') or ''
+        if not secret:
+            return True
+        if not signature_header:
+            return False
+        expected = hmac.new(
+            secret.encode('utf-8'),
+            raw_body,
+            hashlib.sha256,
+        ).hexdigest()
+        return hmac.compare_digest(expected, signature_header)

@@ -27,13 +27,21 @@ class Payment(models.Model):
         ('UPI', 'UPI'),
     ]
 
-    # Idempotency key — unique per payment attempt (Lecture 8)
+    # Server-generated unique id per payment row (Lecture 8)
     payment_id = models.CharField(max_length=255, unique=True)
+
+    # Optional client idempotency key — same POST retries return same payment (Lecture 8)
+    client_idempotency_key = models.CharField(max_length=255, null=True, blank=True, unique=True)
+
+    # Cached payment URL for idempotent replay without calling Razorpay again
+    payment_link_url = models.CharField(max_length=1024, blank=True, null=True)
 
     # FK to order — order_id alone is NOT sufficient (Lecture 8, partial payments)
     order_id = models.CharField(max_length=100)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='payments', null=True, blank=True
+    )
     amount = models.IntegerField()  # Stored as integer (paise), avoids float issues
     status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='PENDING')
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD, default='RAZORPAY')

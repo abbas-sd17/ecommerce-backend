@@ -111,8 +111,13 @@ python manage.py runserver
 ```env
 RAZORPAY_ID=rzp_test_your_key
 RAZORPAY_SECRET=your_secret
+# Public HTTPS URL in production (Razorpay cannot call localhost)
 RAZORPAY_CALLBACK_URL=https://your-domain.com/api/payments/verify/
+# Dashboard → Webhooks → your endpoint → signing secret (validates X-Razorpay-Signature)
+RAZORPAY_WEBHOOK_SECRET=whsec_...
 ```
+
+**Idempotency (Lecture 8):** send the same `Idempotency-Key` header (or `idempotency_key` in the JSON body) on `POST /api/payments/initiate/` to safely retry; the API returns the existing payment and link without double-charging.
 
 ## Lecture-to-Feature Mapping
 
