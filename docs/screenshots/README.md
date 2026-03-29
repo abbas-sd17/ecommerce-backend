@@ -13,7 +13,8 @@ PNG captures for the Applied Software Project / academy report. Taken from the l
 | `07-api-products-health.png` | `GET /api/products/health/` — health check (Lecture 10). |
 | `08-api-products-search-get-405.png` | `GET /api/products/search/` — **405** (search is **POST**-only by design). |
 | `09-api-products-search-post-200.png` | `POST /api/products/search/` — paginated search (Lecture 10). |
+| `10-api-product-detail-get.png` | `GET /api/products/1/` — single product + Redis cache (Lectures 1 & 10). |
 
-**GET `/api/products/<id>/`:** requires Redis **or** `IGNORE_EXCEPTIONS: True` in cache settings so the view still works when Redis is not running.
+**GET `/api/products/<id>/`:** uses Redis when available; with `IGNORE_EXCEPTIONS: True` it still works if Redis is not running.
 
 A merged Word document including these figures is at `../Project_Report_Template_with_Screenshots.docx` (generated from the Scaler template + this appendix).

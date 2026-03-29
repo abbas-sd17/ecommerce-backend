@@ -57,6 +57,11 @@ FIGURES = [
         "Figure A9 — POST /api/products/search/ — pagination & search results (Lecture 10).",
         SHOTS / "09-api-products-search-post-200.png",
     ),
+    (
+        "Figure A10 — GET /api/products/1/ — product detail with Redis caching "
+        "(Lectures 1 & 10).",
+        SHOTS / "10-api-product-detail-get.png",
+    ),
 ]
 
 
