@@ -51,9 +51,24 @@ ecommerce_backend/
 │       └── payment_service.py
 ├── .ebextensions/
 │   └── django.config         # AWS EBS config (Lecture 8)
+├── docs/
+│   ├── screenshots/          # Report PNGs + README
+│   └── Project_Report_Template_with_Screenshots.docx
 ├── requirements.txt
 └── manage.py
 ```
+
+## Report documentation
+
+- **`docs/screenshots/`** — PNG screenshots for the Applied Software Project report (DRF API, Django admin, payments).
+- **`docs/Project_Report_Template_with_Screenshots.docx`** — Scaler backend report template with an **Appendix** of those figures. Regenerate after replacing PNGs:
+
+```bash
+pip install python-docx
+python docs/append_screenshots_to_report.py
+```
+
+The script expects **`Scaler Neovarsity _ Academy Project Report Template (Backend Specialization).docx`** in the parent folder (`syedbackendprojectscaler/`, one level above `ecommerce_backend/`).
 
 ## API Endpoints
 
