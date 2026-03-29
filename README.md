@@ -52,6 +52,8 @@ ecommerce_backend/
 ├── .ebextensions/
 │   └── django.config         # AWS EBS config (Lecture 8)
 ├── docs/
+│   ├── Syed_Abbas_Raza_Project_Report_With_Screenshots.pdf
+│   ├── Syed_Abbas_Raza_Project_Report_With_Screenshots.docx
 │   └── screenshots/          # Report evidence (PNG) + short README
 ├── scripts/
 │   └── make_submission_zip.sh # Build portal ZIP (excludes venv, .git)
@@ -61,8 +63,9 @@ ecommerce_backend/
 
 ## Report & evidence
 
-- **`docs/screenshots/`** — PNG screenshots (API, admin, payments) to paste into your **Word/PDF** academy report. See `docs/screenshots/README.md` for a file list.
-- Submit the **written report** separately on the portal if required (not stored in this repo).
+- **`docs/Syed_Abbas_Raza_Project_Report_With_Screenshots.pdf`** — full project report (PDF).
+- **`docs/Syed_Abbas_Raza_Project_Report_With_Screenshots.docx`** — same report in Word.
+- **`docs/screenshots/`** — PNG screenshots used in the report. See `docs/screenshots/README.md` for a file list.
 
 ## API Endpoints
 
