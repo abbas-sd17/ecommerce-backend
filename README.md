@@ -123,18 +123,41 @@ python manage.py runserver
 # Admin panel: http://127.0.0.1:8000/admin/
 ```
 
-## Publish to GitHub
+## Git workflow (branching)
 
-Target remote: **[github.com/abbas-sd17/ecommerce-backend](https://github.com/abbas-sd17/ecommerce-backend)** (create it once if it does not exist).
+This repo follows a **GitHub Flow**–style layout (simple and common for coursework and small teams):
 
-1. Create an **empty** public repository named `ecommerce-backend` under your account (no README / `.gitignore` / license): [github.com/new](https://github.com/new?name=ecommerce-backend).
-2. From this project root, `origin` should already be set. Push:
+| Branch | Role |
+|--------|------|
+| **`main`** | Always **deployable / submission-ready**. Only merge tested work (via pull request or fast-forward after review). |
+| **`develop`** | Optional **integration** line. Day-to-day commits can target `develop`; merge `develop` → `main` when you cut a stable milestone. |
+| **`feature/*`**, **`fix/*`**, **`docs/*`** | Short-lived branches off `main` (or `develop`). Example: `feature/payment-webhook-tests`. |
+
+**Typical loop**
 
 ```bash
-git push -u origin main
+git checkout main && git pull origin main
+git checkout -b feature/my-change
+# ... commit with clear messages: feat:, fix:, docs:, chore: ...
+git push -u origin feature/my-change
+# Open a Pull Request on GitHub → merge into main (or into develop first).
 ```
 
-**Or** create the repo via API and push in one step (needs a [Personal Access Token](https://github.com/settings/tokens) with `repo` scope):
+**Releases:** meaningful snapshots are tagged on `main` (e.g. `v1.0.0`) with `git tag -a v1.0.0 -m "message" && git push origin v1.0.0`.
+
+On GitHub you can enable **branch protection** on `main` (require PR, optional checks) under **Settings → Branches**.
+
+## Publish to GitHub
+
+Remote: **[github.com/abbas-sd17/ecommerce-backend](https://github.com/abbas-sd17/ecommerce-backend)**.
+
+```bash
+git push -u origin main          # default branch
+git push -u origin develop     # after develop exists locally
+git push origin v1.0.0         # push a release tag (optional)
+```
+
+**Or** create the repo via API and push (needs a [Personal Access Token](https://github.com/settings/tokens) with `repo` scope):
 
 ```bash
 export GITHUB_TOKEN=ghp_your_token_here
