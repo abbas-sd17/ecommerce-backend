@@ -85,6 +85,44 @@ FIGURES = [
 ]
 
 
+def _short_figure_title(caption: str) -> str:
+    """Title column text for List of Figures (matches appendix captions)."""
+    if "—" in caption:
+        t = caption.split("—", 1)[1].strip()
+    else:
+        t = caption
+    if "(" in t:
+        t = t.split("(", 1)[0].strip()
+    return t[:220]
+
+
+def _extend_list_of_figures_for_appendix(doc: Document) -> None:
+    """
+    Add rows A1–A10 to the front-matter List of Figures table.
+    Page No. is left blank — fill in Word after Update Fields / final pagination.
+    """
+    for tbl in doc.tables:
+        if not tbl.rows:
+            continue
+        hdr = [c.text.strip() for c in tbl.rows[0].cells]
+        if len(hdr) < 3:
+            continue
+        if not hdr[0].lower().startswith("figure"):
+            continue
+        if "title" not in hdr[1].lower():
+            continue
+        # Avoid duplicating if script re-run on an already-extended copy (check last row)
+        last_first = tbl.rows[-1].cells[0].text.strip()
+        if last_first == "A10":
+            return
+        for n, (caption, _) in enumerate(FIGURES, start=1):
+            row = tbl.add_row()
+            row.cells[0].text = f"A{n}"
+            row.cells[1].text = _short_figure_title(caption)
+            row.cells[2].text = ""
+        return
+
+
 def _append_appendix(doc: Document) -> None:
     doc.add_page_break()
     doc.add_heading("Appendix — Project screenshots", level=1)
@@ -124,6 +162,7 @@ def main() -> None:
                 "Place Syed_Abbas_Raza_Project_Report.docx next to the ecommerce_backend folder."
             )
         doc = Document(str(SYED_SOURCE))
+        _extend_list_of_figures_for_appendix(doc)
         _append_appendix(doc)
         doc.save(str(SYED_OUT_WS))
         print(f"Wrote {SYED_OUT_WS}")
@@ -133,6 +172,7 @@ def main() -> None:
         if not SCALER_TEMPLATE.is_file():
             raise SystemExit(f"Template not found: {SCALER_TEMPLATE}")
         doc = Document(str(SCALER_TEMPLATE))
+        _extend_list_of_figures_for_appendix(doc)
         _append_appendix(doc)
         doc.save(str(TEMPLATE_OUT))
         print(f"Wrote {TEMPLATE_OUT}")
