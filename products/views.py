@@ -125,11 +125,25 @@ def filter_products(request):
     Filter products using Q objects and query chaining.
     Lecture 2 — Q Objects, query chaining.
     Query params: min_price, max_price, available, category
+    Example: /api/products/filter/?min_price=100&max_price=5000
     """
-    min_price = request.query_params.get('min_price', 0)
-    max_price = request.query_params.get('max_price', 999999)
+    raw_min = request.query_params.get('min_price', '0')
+    raw_max = request.query_params.get('max_price', '999999')
     available = request.query_params.get('available', None)
     category = request.query_params.get('category', None)
+
+    try:
+        min_price = float(raw_min)
+        max_price = float(raw_max)
+    except (TypeError, ValueError):
+        return Response(
+            {
+                "error": "min_price and max_price must be numbers.",
+                "example": "/api/products/filter/?min_price=100&max_price=5000",
+                "received": {"min_price": raw_min, "max_price": raw_max},
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     # Query chaining (Lecture 2)
     qs = Product.objects.filter(
