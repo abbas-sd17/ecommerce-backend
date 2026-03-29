@@ -44,6 +44,19 @@ FIGURES = [
         "(Lectures 8–9).",
         SHOTS / "06-api-payments-list.png",
     ),
+    (
+        "Figure A7 — GET /api/products/health/ — health check (Lecture 10).",
+        SHOTS / "07-api-products-health.png",
+    ),
+    (
+        "Figure A8 — GET /api/products/search/ returns 405 — search endpoint is POST-only "
+        "(Lecture 10).",
+        SHOTS / "08-api-products-search-get-405.png",
+    ),
+    (
+        "Figure A9 — POST /api/products/search/ — pagination & search results (Lecture 10).",
+        SHOTS / "09-api-products-search-post-200.png",
+    ),
 ]
 
 
