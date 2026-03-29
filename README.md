@@ -52,25 +52,17 @@ ecommerce_backend/
 ├── .ebextensions/
 │   └── django.config         # AWS EBS config (Lecture 8)
 ├── docs/
-│   ├── screenshots/          # Report PNGs + README
-│   ├── Syed_Abbas_Raza_Project_Report_With_Screenshots.docx
-│   └── Project_Report_Template_with_Screenshots.docx  # optional (--source template)
+│   └── screenshots/          # Report evidence (PNG) + short README
+├── scripts/
+│   └── make_submission_zip.sh # Build portal ZIP (excludes venv, .git)
 ├── requirements.txt
 └── manage.py
 ```
 
-## Report documentation
+## Report & evidence
 
-- **`docs/screenshots/`** — PNG screenshots for the Applied Software Project report (DRF API, Django admin, payments).
-- **Your Word report** — keep **`Syed_Abbas_Raza_Project_Report.docx`** in the folder **above** this repo (`syedbackendprojectscaler/`, next to the Scaler template).
-- **`docs/Syed_Abbas_Raza_Project_Report_With_Screenshots.docx`** — your report plus an **Appendix** with all figures. Regenerate after editing the source `.docx` or replacing PNGs:
-
-```bash
-pip install python-docx
-python docs/append_screenshots_to_report.py
-```
-
-Also creates **`../Syed_Abbas_Raza_Project_Report_With_Screenshots.docx`** beside your source file. Empty template only: `python docs/append_screenshots_to_report.py --source template` → `docs/Project_Report_Template_with_Screenshots.docx`.
+- **`docs/screenshots/`** — PNG screenshots (API, admin, payments) to paste into your **Word/PDF** academy report. See `docs/screenshots/README.md` for a file list.
+- Submit the **written report** separately on the portal if required (not stored in this repo).
 
 ## API Endpoints
 
@@ -152,16 +144,23 @@ On GitHub you can enable **branch protection** on `main` (require PR, optional c
 Remote: **[github.com/abbas-sd17/ecommerce-backend](https://github.com/abbas-sd17/ecommerce-backend)**.
 
 ```bash
-git push -u origin main          # default branch
-git push -u origin develop     # after develop exists locally
-git push origin v1.0.0         # push a release tag (optional)
+git push -u origin main
+git push -u origin develop   # optional
+git push origin v1.0.0       # optional tag
 ```
 
-**Or** create the repo via API and push (needs a [Personal Access Token](https://github.com/settings/tokens) with `repo` scope):
+## Portal submission (ZIP)
+
+For uploads that ask for **source code without** virtualenv or Git metadata:
+
+1. Use the generated archive next to this folder: **`ecommerce-backend-submission.zip`** (created in `syedbackendprojectscaler/`; excludes `venv/`, `.git/`, `__pycache__`, `*.pyc`, `db.sqlite3`).
+2. Attach your **PDF/Word report** separately if the portal has a second field.
+3. **Demo data (optional):** after `migrate`, run `python manage.py seed_demo_data` for admin/API samples.
+
+Regenerate the ZIP after code changes (run from the folder that **contains** `ecommerce_backend/`):
 
 ```bash
-export GITHUB_TOKEN=ghp_your_token_here
-bash scripts/github_create_and_push.sh
+bash ecommerce_backend/scripts/make_submission_zip.sh
 ```
 
 ## Environment Variables

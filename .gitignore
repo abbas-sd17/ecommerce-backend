@@ -31,10 +31,14 @@ staticfiles/
 
 # OS
 .DS_Store
+**/.DS_Store
 Thumbs.db
 
 # AWS - note: .ebextensions tracked in git
 *.pem
+
+# Generated / local reports (keep screenshots; Word reports live outside repo or attach separately)
+docs/*.docx
 
 # Coverage
 htmlcov/
