@@ -123,6 +123,24 @@ python manage.py runserver
 # Admin panel: http://127.0.0.1:8000/admin/
 ```
 
+## Publish to GitHub
+
+Target remote: **[github.com/abbas-sd17/ecommerce-backend](https://github.com/abbas-sd17/ecommerce-backend)** (create it once if it does not exist).
+
+1. Create an **empty** public repository named `ecommerce-backend` under your account (no README / `.gitignore` / license): [github.com/new](https://github.com/new?name=ecommerce-backend).
+2. From this project root, `origin` should already be set. Push:
+
+```bash
+git push -u origin main
+```
+
+**Or** create the repo via API and push in one step (needs a [Personal Access Token](https://github.com/settings/tokens) with `repo` scope):
+
+```bash
+export GITHUB_TOKEN=ghp_your_token_here
+bash scripts/github_create_and_push.sh
+```
+
 ## Environment Variables
 
 ```env
